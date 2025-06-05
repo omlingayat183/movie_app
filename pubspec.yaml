@@ -1,0 +1,50 @@
+name: movie_app
+description: "A Flutter movie‐search app with watchlist & favorites."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^1.0.8
+  equatable: ^2.0.7
+  bloc: ^9.0.0
+  shared_preferences: ^2.5.3
+  flutter_bloc: ^9.1.1
+  share_plus: ^11.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^5.0.0
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/movies.json
+    - assets/yellow_bg.jpg
+    - assets/welcome.png
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          weight: 700
+        # add other variants as needed (e.g. Italic, Medium, etc.)
+
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        # - asset: assets/fonts/Inter-Italic.ttf
+        #   style: italic
