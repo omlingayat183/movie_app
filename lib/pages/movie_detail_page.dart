@@ -23,7 +23,7 @@ Poster URL : ${movie.posterUrl}
 Description:
 ${movie.description}
 ''';
-    
+
     Share.share(details);
   }
 
@@ -111,7 +111,7 @@ ${movie.description}
     final releaseText = _formatReleaseDate(movie.releaseDate);
 
     return Scaffold(
-      backgroundColor: AppColors.black, 
+      backgroundColor: AppColors.black,
       appBar: AppBar(
         backgroundColor: AppColors.black,
         elevation: 0,
@@ -129,7 +129,6 @@ ${movie.description}
           ),
         ),
         actions: [
-          
           BlocBuilder<BookmarkCubit, BookmarkState>(
             builder: (context, _) {
               final cubit = context.read<BookmarkCubit>();
@@ -151,8 +150,6 @@ ${movie.description}
               );
             },
           ),
-
-          
           IconButton(
             icon: const Icon(Icons.share_outlined, color: AppColors.goldAccent),
             onPressed: _shareMovieDetails,
@@ -164,7 +161,6 @@ ${movie.description}
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
@@ -184,32 +180,26 @@ ${movie.description}
                 },
               ),
             ),
-
             const SizedBox(height: 8),
-
             Text(
               'Releasing on $releaseText',
               style: const TextStyle(
                 fontFamily: 'Inter',
-                color: Color(0xFF669DFA), 
+                color: Color(0xFF669DFA),
                 fontSize: 12,
               ),
             ),
-
             const SizedBox(height: 12),
-
             Text(
               movie.title,
               style: const TextStyle(
                 fontFamily: 'Montserrat',
-                color: AppColors.brightBlue, 
+                color: AppColors.brightBlue,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 6),
-
             Text(
               '${movie.duration} • ${movie.genre}',
               style: const TextStyle(
@@ -218,9 +208,7 @@ ${movie.description}
                 fontSize: 14,
               ),
             ),
-
             const SizedBox(height: 12),
-
             Text(
               movie.description,
               style: const TextStyle(
@@ -230,21 +218,17 @@ ${movie.description}
                 height: 1.4,
               ),
             ),
-
             const SizedBox(height: 20),
-
             const Text(
               'Review',
               style: TextStyle(
                 fontFamily: 'Montserrat',
-                color: AppColors.brightBlue, 
+                color: AppColors.brightBlue,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 8),
-
             Row(
               children: [
                 _buildStarRating(movie.rating),
@@ -259,9 +243,7 @@ ${movie.description}
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
-
             BlocBuilder<WatchlistCubit, WatchlistState>(
               builder: (context, _) {
                 final watchlistCubit = context.read<WatchlistCubit>();
@@ -306,7 +288,6 @@ ${movie.description}
                 );
               },
             ),
-
             const SizedBox(height: 24),
           ],
         ),

@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FocusNode _searchFocusNode = FocusNode();
   String _currentSearchQuery = '';
-  List<Movie> _allMovies = []; 
+  List<Movie> _allMovies = [];
 
   @override
   void initState() {
@@ -38,9 +38,9 @@ class _HomePageState extends State<HomePage> {
   Future<bool> _onWillPop() async {
     if (_searchFocusNode.hasFocus) {
       _searchFocusNode.unfocus();
-      return false; 
+      return false;
     }
-    return true; 
+    return true;
   }
 
   @override
@@ -52,7 +52,6 @@ class _HomePageState extends State<HomePage> {
         body: SafeArea(
           child: BlocBuilder<MovieSearchBloc, MovieSearchState>(
             builder: (context, state) {
-              
               if (state is MoviesLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -68,7 +67,6 @@ class _HomePageState extends State<HomePage> {
                 );
               }
 
-             
               if (state is MoviesLoadSuccess) {
                 _allMovies = state.allMovies;
               }
@@ -82,30 +80,26 @@ class _HomePageState extends State<HomePage> {
                 noResults = true;
               }
 
-            
               if (_allMovies.isEmpty && !hasQuery) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-        
               return CustomScrollView(
                 physics: const BouncingScrollPhysics(),
                 slivers: [
-                 
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 12),
                       child: Row(
                         children: [
-                        
                           Expanded(
                             child: Container(
-                              height: 50, 
+                              height: 50,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
-                                color: Colors.grey[900], 
+                                color: Colors.grey[900],
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                   color: AppColors.goldAccent,
@@ -137,35 +131,34 @@ class _HomePageState extends State<HomePage> {
                                         isDense: true,
                                       ),
                                       onChanged: (query) {
+                                        setState(() {
+                                          _currentSearchQuery = query;
+                                        });
                                         context
                                             .read<MovieSearchBloc>()
                                             .add(SearchQueryChanged(query));
                                       },
                                     ),
                                   ),
-                                 
-                                  IconButton(
-                                    icon: const Icon(Icons.clear,
-                                        color: Colors.grey, size: 18),
-                                    padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(),
-                                    onPressed: () {
-                                      _searchFocusNode.unfocus();
-                                      context
-                                          .read<MovieSearchBloc>()
-                                          .add(SearchQueryChanged(''));
-                                    },
-                                  ),
+                                  // IconButton(
+                                  //   icon: const Icon(Icons.clear,
+                                  //       color: Colors.grey, size: 18),
+                                  //   padding: EdgeInsets.zero,
+                                  //   constraints: const BoxConstraints(),
+                                  //   onPressed: () {
+                                  //     _searchFocusNode.unfocus();
+                                  //     context
+                                  //         .read<MovieSearchBloc>()
+                                  //         .add(SearchQueryChanged(''));
+                                  //   },
+                                  // ),
                                 ],
                               ),
                             ),
                           ),
-
                           const SizedBox(width: 12),
-
                           GestureDetector(
-                            onTap: () {
-                            },
+                            onTap: () {},
                             child: Stack(
                               clipBehavior: Clip.none,
                               children: [
@@ -193,7 +186,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-
                   if (!hasQuery) ...[
                     SliverToBoxAdapter(
                       child: SizedBox(
@@ -204,9 +196,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
-
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -263,9 +253,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
                     const SliverToBoxAdapter(child: SizedBox(height: 8)),
-
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       sliver: SliverGrid(
@@ -286,10 +274,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
                     const SliverToBoxAdapter(child: SizedBox(height: 12)),
-                  ]
-                  else ...[
+                  ] else ...[
                     if (noResults)
                       const SliverFillRemaining(
                         hasScrollBody: false,
@@ -385,9 +371,7 @@ class _RecommendedMovieCard extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 4),
-
             SizedBox(
               width: 105,
               height: 15,
@@ -400,13 +384,11 @@ class _RecommendedMovieCard extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   fontSize: 12,
                   height: 15 / 12,
-                  color: AppColors.brightBlue, 
+                  color: AppColors.brightBlue,
                 ),
               ),
             ),
-
             const SizedBox(height: 0),
-
             SizedBox(
               width: 98,
               height: 14,
