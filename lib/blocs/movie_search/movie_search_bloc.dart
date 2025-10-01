@@ -34,8 +34,7 @@ class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
   ) {
     final query = event.query.trim().toLowerCase();
     if (query.isEmpty) {
-     
-      emit(MoviesLoadSuccess(_allMovies));
+      emit(MovieSearchResults(_allMovies)); 
     } else {
       final filtered = _allMovies
           .where((m) => m.title.toLowerCase().contains(query))

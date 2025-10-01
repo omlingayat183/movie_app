@@ -165,19 +165,17 @@ ${movie.description}
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
                 movie.posterUrl,
-                height: 200,
-                width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 200,
-                    color: Colors.grey[800],
-                    child: const Center(
-                      child: Icon(Icons.broken_image,
-                          color: Colors.white60, size: 48),
-                    ),
-                  );
-                },
+                width: double.infinity,
+                height: MediaQuery.of(context).size.width < 600
+                    ? 200 // mobile
+                    : 300, // web
+                errorBuilder: (_, __, ___) => Container(
+                  height: MediaQuery.of(context).size.width < 600 ? 200 : 400,
+                  color: Colors.grey[800],
+                  child: const Icon(Icons.broken_image,
+                      size: 48, color: Colors.white60),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -249,41 +247,46 @@ ${movie.description}
                 final watchlistCubit = context.read<WatchlistCubit>();
                 final inWatchlist = watchlistCubit.isInWatchlist(movie);
 
-                return SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: AppColors.black,
-                      backgroundColor:
-                          inWatchlist ? Colors.grey[600] : AppColors.goldAccent,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                return Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width < 600
+                        ? double.infinity 
+                        : 400,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: AppColors.black,
+                        backgroundColor: inWatchlist
+                            ? Colors.grey[600]
+                            : AppColors.goldAccent,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                    ),
-                    label: Text(
-                      inWatchlist ? 'Remove from Watchlist' : 'Watchlist',
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      label: Text(
+                        inWatchlist ? 'Remove from Watchlist' : 'Watchlist',
+                        style: const TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      icon: Icon(
+                        inWatchlist
+                            ? Icons.remove_circle_outline
+                            : Icons.add_circle_outline,
+                        color: AppColors.black,
+                      ),
+                      onPressed: () {
+                        if (inWatchlist) {
+                          watchlistCubit.removeFromWatchlist(movie);
+                        } else {
+                          watchlistCubit.addToWatchlist(movie);
+                        }
+                        _showWatchlistSnackBar(context, !inWatchlist);
+                      },
                     ),
-                    icon: Icon(
-                      inWatchlist
-                          ? Icons.remove_circle_outline
-                          : Icons.add_circle_outline,
-                      color: AppColors.black,
-                    ),
-                    onPressed: () {
-                      if (inWatchlist) {
-                        watchlistCubit.removeFromWatchlist(movie);
-                      } else {
-                        watchlistCubit.addToWatchlist(movie);
-                      }
-                      _showWatchlistSnackBar(context, !inWatchlist);
-                    },
                   ),
                 );
               },

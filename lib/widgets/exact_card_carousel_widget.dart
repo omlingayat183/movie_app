@@ -17,7 +17,16 @@ class _ExactCardCarouselState extends State<ExactCardCarousel> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(viewportFraction: 1.0); 
+
+    final initialPage =
+        widget.imageUrls.length > 1 ? widget.imageUrls.length ~/ 2 : 0;
+
+    _pageController = PageController(
+      viewportFraction: 0.7,
+      initialPage: initialPage,
+    );
+
+    _currentPage = initialPage;
   }
 
   @override
@@ -26,41 +35,43 @@ class _ExactCardCarouselState extends State<ExactCardCarousel> {
     super.dispose();
   }
 
-  Widget _buildExactCard(String imageUrl) {
-    return Center(
+  Widget _buildExactCard(
+      String imageUrl, double cardWidth, double cardHeight, bool isActive) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      margin:
+          EdgeInsets.symmetric(horizontal: isActive ? 6 : 12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Container(
-          width: 393,
-          height: 218,
+          width: cardWidth,
+          height: cardHeight,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: const Color(0xFFD4AF37), 
-              width: 1, 
+              color: const Color(0xFFD4AF37),
+              width: isActive ? 2 : 1,
             ),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              width: 393,
-              height: 218,
-              loadingBuilder: (context, child, progress) {
-                if (progress == null) return child;
-                return const Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (context, err, stack) {
-                return Container(
-                  color: Colors.grey[800],
-                  child: const Center(
-                    child: Icon(Icons.broken_image,
-                        color: Colors.white60, size: 48),
-                  ),
-                );
-              },
-            ),
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+            width: cardWidth,
+            height: cardHeight,
+            loadingBuilder: (context, child, progress) {
+              if (progress == null) return child;
+              return const Center(child: CircularProgressIndicator());
+            },
+            errorBuilder: (context, err, stack) {
+              return Container(
+                color: Colors.grey[800],
+                child: const Center(
+                  child:
+                      Icon(Icons.broken_image, color: Colors.white60, size: 48),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -72,16 +83,20 @@ class _ExactCardCarouselState extends State<ExactCardCarousel> {
     return LayoutBuilder(builder: (context, constraints) {
       final screenWidth = constraints.maxWidth;
 
-      final fraction = 393.0 / screenWidth;
 
-      if ((_pageController.viewportFraction - fraction).abs() > 0.001) {
-        _pageController.dispose();
-        _pageController = PageController(
-            viewportFraction: fraction, initialPage: _currentPage);
-      }
+      final isMobile = MediaQuery.of(context).size.width < 600;
+
+      final cardWidth = isMobile
+          ? screenWidth * 0.55
+          : screenWidth * 0.45;
+
+      final cardHeight = isMobile
+          ? cardWidth * 9 / 16 
+          : MediaQuery.of(context).size.height *
+              0.45; 
 
       return SizedBox(
-        height: 218 + 24,
+        height: cardHeight + 50,
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -95,32 +110,34 @@ class _ExactCardCarouselState extends State<ExactCardCarousel> {
               },
               itemBuilder: (context, index) {
                 final imageUrl = widget.imageUrls[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 6), 
-                  child: _buildExactCard(imageUrl),
+                final isActive = index == _currentPage;
+                return _buildExactCard(
+                  imageUrl,
+                  cardWidth,
+                  cardHeight,
+                  isActive,
                 );
               },
             ),
 
             Positioned(
-              bottom: 0,
+              bottom: 8,
               left: 0,
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(widget.imageUrls.length, (dotIndex) {
                   final isActive = (dotIndex == _currentPage);
-                  return Container(
-                    width: 8,
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: isActive ? 10 : 8,
                     height: 8,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: isActive
-                          ? const Color(0xFFD4AF37) 
-                          : Colors.white
-                              .withOpacity(0.6),
+                          ? const Color(0xFFD4AF37)
+                          : Colors.white.withOpacity(0.6),
                     ),
                   );
                 }),

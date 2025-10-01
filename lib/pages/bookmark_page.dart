@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/utils/app_colors.dart';
+import 'package:movie_app/utils/responsive.dart';
 import '../blocs/bookmark/bookmark_cubit.dart';
 import '../blocs/bookmark/bookmark_state.dart';
 import '../models/movie.dart';
@@ -9,8 +10,6 @@ import 'movie_detail_page.dart';
 class BookmarkPage extends StatelessWidget {
   const BookmarkPage({Key? key}) : super(key: key);
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +17,6 @@ class BookmarkPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.black,
         elevation: 0,
-        
         title: const Text(
           'Bookmarks',
           style: TextStyle(
@@ -75,10 +73,17 @@ class BookmarkPage extends StatelessWidget {
               );
             }
 
-            return ListView.separated(
+            return GridView.builder(
               padding: const EdgeInsets.all(16),
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:
+                    Responsive.gridColumns(context, minWidth: 350, max: 4),
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 346 / 197,
+              ),
               itemCount: movies.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 return _BookmarkMovieListTile(movie: movies[index]);
               },
@@ -91,7 +96,6 @@ class BookmarkPage extends StatelessWidget {
     );
   }
 }
-
 
 class _BookmarkMovieListTile extends StatelessWidget {
   final Movie movie;
@@ -109,20 +113,17 @@ class _BookmarkMovieListTile extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        
         Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => MovieDetailPage(movie: movie),
         ));
       },
       child: SizedBox(
         width: 346,
-        height: 197,
         child: Stack(
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              
                 Container(
                   width: 123,
                   height: 197,
@@ -146,15 +147,11 @@ class _BookmarkMovieListTile extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(width: 10),
-
-                
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                    
                       Text(
                         movie.title,
                         maxLines: 1,
@@ -167,10 +164,7 @@ class _BookmarkMovieListTile extends StatelessWidget {
                           color: AppColors.brightBlue,
                         ),
                       ),
-
                       const SizedBox(height: 6),
-
-                   
                       Text(
                         '${movie.duration} • ${movie.genre}',
                         maxLines: 1,
@@ -179,13 +173,11 @@ class _BookmarkMovieListTile extends StatelessWidget {
                           fontFamily: 'Inter',
                           fontStyle: FontStyle.italic,
                           fontSize: 11,
-                          height: 15.4 / 11, 
+                          height: 15.4 / 11,
                           color: _subtitle,
                         ),
                       ),
-
                       const SizedBox(height: 8),
-
                       SizedBox(
                         height: 68,
                         child: Text(
@@ -195,18 +187,15 @@ class _BookmarkMovieListTile extends StatelessWidget {
                           style: const TextStyle(
                             fontFamily: 'Roboto',
                             fontSize: 12,
-                            height: 16.8 / 12, 
+                            height: 16.8 / 12,
                             color: AppColors.white,
                           ),
                         ),
                       ),
-
                       const Spacer(),
-
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        
                           const Text(
                             'Review',
                             style: TextStyle(
@@ -218,15 +207,11 @@ class _BookmarkMovieListTile extends StatelessWidget {
                               color: _reviewBlue,
                             ),
                           ),
-
                           const SizedBox(height: 4),
-
                           Row(
                             children: [
                               _buildStarRating(movie.rating),
-
                               const SizedBox(width: 4),
-
                               Text(
                                 '(${movie.rating.toStringAsFixed(1)})',
                                 style: const TextStyle(
@@ -241,19 +226,15 @@ class _BookmarkMovieListTile extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 8),
                     ],
                   ),
                 ),
               ],
             ),
-
             Positioned(
               top: 8,
-              left: 115 -
-                  24 +
-                  8, 
+              left: 115 - 24 + 8,
               child: GestureDetector(
                 onTap: () => bookmarkCubit.removeBookmark(movie),
                 child: const Icon(

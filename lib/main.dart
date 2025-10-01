@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:movie_app/utils/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import 'models/movie.dart';
 import 'blocs/authentication/auth_cubit.dart';
@@ -13,8 +14,11 @@ import 'blocs/bookmark/bookmark_cubit.dart';
 
 import 'pages/splash_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
+  setPathUrlStrategy();
 
   final prefs = await SharedPreferences.getInstance();
   final jsonString = await rootBundle.loadString('assets/movies.json');
@@ -58,13 +62,12 @@ class MyApp extends StatelessWidget {
         title: 'Movie App',
         theme: ThemeData(
           textSelectionTheme: TextSelectionThemeData(
-            cursorColor: AppColors.goldAccent, 
+            cursorColor: AppColors.goldAccent,
             selectionColor: AppColors.goldAccent.withAlpha(40),
-            selectionHandleColor: AppColors.goldAccent, 
+            selectionHandleColor: AppColors.goldAccent,
           ),
           brightness: Brightness.dark,
           scaffoldBackgroundColor: AppColors.black,
-
           textTheme: const TextTheme(
             displayLarge: TextStyle(
               fontFamily: 'Montserrat',
@@ -109,7 +112,6 @@ class MyApp extends StatelessWidget {
               color: AppColors.black,
             ),
           ),
-
           appBarTheme: const AppBarTheme(
             backgroundColor: AppColors.black,
             elevation: 0,
@@ -121,7 +123,6 @@ class MyApp extends StatelessWidget {
             ),
             iconTheme: IconThemeData(color: AppColors.goldAccent),
           ),
-
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
               foregroundColor: AppColors.black,
@@ -133,17 +134,15 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-
-          inputDecorationTheme: InputDecorationTheme(
-            hintStyle: const TextStyle(
+          inputDecorationTheme: const InputDecorationTheme(
+            hintStyle: TextStyle(
               fontFamily: 'Inter',
               color: Colors.white38,
             ),
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
               fontFamily: 'Inter',
               color: Colors.white70,
             ),
-          
           ),
         ),
         home: const SplashScreen(),

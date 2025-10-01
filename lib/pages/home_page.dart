@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/pages/all_movies_page.dart';
 import 'package:movie_app/utils/app_colors.dart';
+import 'package:movie_app/utils/responsive.dart';
 import 'package:movie_app/widgets/exact_card_carousel_widget.dart';
 import '../blocs/movie_search/movie_search_bloc.dart';
 import '../blocs/movie_search/movie_search_event.dart';
@@ -140,18 +141,6 @@ class _HomePageState extends State<HomePage> {
                                       },
                                     ),
                                   ),
-                                  // IconButton(
-                                  //   icon: const Icon(Icons.clear,
-                                  //       color: Colors.grey, size: 18),
-                                  //   padding: EdgeInsets.zero,
-                                  //   constraints: const BoxConstraints(),
-                                  //   onPressed: () {
-                                  //     _searchFocusNode.unfocus();
-                                  //     context
-                                  //         .read<MovieSearchBloc>()
-                                  //         .add(SearchQueryChanged(''));
-                                  //   },
-                                  // ),
                                 ],
                               ),
                             ),
@@ -189,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                   if (!hasQuery) ...[
                     SliverToBoxAdapter(
                       child: SizedBox(
-                        height: 200,
+                        // height: 200,
                         child: ExactCardCarousel(
                           imageUrls:
                               _allMovies.map((m) => m.posterUrl).toList(),
@@ -257,9 +246,9 @@ class _HomePageState extends State<HomePage> {
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       sliver: SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: Responsive.gridColumns(context,
+                              minWidth: 160, max: 6),
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                           childAspectRatio: 122 / 237,
@@ -298,19 +287,25 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         sliver: SliverGrid(
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 12,
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: Responsive.gridColumns(
+                              context,
+                              minWidth: 160,
+                              max: 6,
+                            ),
                             crossAxisSpacing: 12,
-                            childAspectRatio: 122 / 237,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 0.65,
                           ),
                           delegate: SliverChildBuilderDelegate(
-                            (context, idx) {
-                              if (idx >= filteredMovies.length) return null;
-                              final m = filteredMovies[idx];
-                              return _RecommendedMovieCard(movie: m);
+                            (context, index) {
+                              if (index >= filteredMovies.length) return null;
+                              return _RecommendedMovieCard(
+                                  movie:
+                                      filteredMovies[index]); 
                             },
-                            childCount: filteredMovies.length,
+                            childCount:
+                                filteredMovies.length, 
                           ),
                         ),
                       ),
@@ -339,14 +334,11 @@ class _RecommendedMovieCard extends StatelessWidget {
           ),
         );
       },
-      child: AspectRatio(
-        aspectRatio: 122 / 237,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 122,
-              height: 197,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
@@ -364,50 +356,40 @@ class _RecommendedMovieCard extends StatelessWidget {
                       color: Colors.grey[800],
                       child: const Center(
                         child: Icon(Icons.broken_image,
-                            color: Colors.white60, size: 48),
+                            color: Colors.white60, size: 40),
                       ),
                     );
                   },
                 ),
               ),
             ),
-            const SizedBox(height: 4),
-            SizedBox(
-              width: 105,
-              height: 15,
-              child: Text(
-                movie.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                  height: 15 / 12,
-                  color: AppColors.brightBlue,
-                ),
-              ),
+          ),
+          const SizedBox(height: 6),
+         
+          Text(
+            movie.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+              color: AppColors.brightBlue,
             ),
-            const SizedBox(height: 0),
-            SizedBox(
-              width: 98,
-              height: 14,
-              child: Text(
-                movie.genre,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 10,
-                  height: 14 / 10,
-                  color: Color(0xFFD9D9D9),
-                ),
-              ),
+          ),
+          
+          Text(
+            movie.genre,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontStyle: FontStyle.italic,
+              fontSize: 11,
+              color: Color(0xFFD9D9D9),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
