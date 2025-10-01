@@ -1,16 +1,24 @@
-# movie_app
+# Movie_App – Flutter Web Version
 
-A new Flutter project.
 
-## Getting Started
+## 1. Project Overview
 
-This project is a starting point for a Flutter application.
+Movie_App is a movie browsing application originally developed for Android using Flutter. The app allows users to:
 
-A few resources to get you started if this is your first Flutter project:
+- Browse movies in a responsive grid layout  
+- Search for movies by title  
+- View detailed information for each movie  
+- Login/Register with authentication  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This project involves converting the existing mobile app into a **fully functional web version**, maintaining all features while optimizing the UI for different screen sizes.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 2. Features
+
+- **Movie Listing:** Browse all movies with poster images, titles, and genres  
+- **Search Functionality:** Filter movies dynamically by title  
+- **Movie Detail Page:** View detailed information about selected movies  
+- **Authentication:** Login, register, and remember me functionality  
+- **Responsive UI:** Works on mobile, tablet, and desktop screens  
+- **Error Handling:** Handles text overflow and image loading errors  
